@@ -1,0 +1,249 @@
+class SET:
+    """
+    A mathematical SET implementation supporting fundamental set operations.
+    This class models a finite set with operations corresponding to standard
+    set theory in discrete mathematics.
+    """
+    
+    def __init__(self, elements):
+        """
+        Initialize a set with given elements.
+        
+        Parameters:
+        elements (iterable): Collection of elements to form the set
+        """
+        # Remove duplicates to maintain set property (no repeated elements)
+        # Convert to list for consistent iteration and indexing
+        self.elements = list(set(elements))
+    
+    def is_member(self, element):
+        """
+        Check membership of an element in the set (∈ relation).
+        
+        Parameters:
+        element: The element to test for membership
+        
+        Returns:
+        bool: True if element ∈ set, False otherwise
+        """
+        return element in self.elements
+    
+    def powerset(self):
+        """
+        Generate the power set P(S) - the set of all subsets of S.
+        
+        Returns:
+        list: List containing all subsets (each subset as a list)
+        Computational Complexity: O(2^n) where n = |S|
+        """
+        # Start with empty set
+        pset = [[]]
+        
+        # Iteratively build power set using binary inclusion principle
+        for elem in self.elements:
+            # For each existing subset, create a new subset including current element
+            pset += [subset + [elem] for subset in pset]
+        
+        return pset
+    
+    def subset(self, other_set):
+        """
+        Determine if this set is a subset of another set (⊆ relation).
+        
+        Parameters:
+        other_set (SET): The potential superset
+        
+        Returns:
+        bool: True if self ⊆ other_set, False otherwise
+        """
+        # All elements of self must be in other_set
+        return all(elem in other_set.elements for elem in self.elements)
+    
+    def union(self, other_set):
+        """
+        Compute union of two sets (A ∪ B).
+        
+        Parameters:
+        other_set (SET): The set to union with
+        
+        Returns:
+        SET: New set containing elements from both sets
+        """
+        # Union = all elements from both sets
+        return SET(self.elements + other_set.elements)
+    
+    def intersection(self, other_set):
+        """
+        Compute intersection of two sets (A ∩ B).
+        
+        Parameters:
+        other_set (SET): The set to intersect with
+        
+        Returns:
+        SET: New set containing common elements
+        """
+        # Intersection = elements present in both sets
+        return SET([elem for elem in self.elements if elem in other_set.elements])
+    
+    def complement(self, universal_set):
+        """
+        Compute complement relative to a universal set (Aᶜ = U - A).
+        
+        Parameters:
+        universal_set (SET): The universal set U
+        
+        Returns:
+        SET: New set containing elements in U but not in self
+        """
+        # Complement = elements in universal set minus elements in current set
+        return SET([elem for elem in universal_set.elements if elem not in self.elements])
+    
+    def set_difference(self, other_set):
+        """
+        Compute set difference (A - B).
+        
+        Parameters:
+        other_set (SET): The set to subtract
+        
+        Returns:
+        SET: New set with elements in A but not in B
+        """
+        # Set difference = elements in self excluding those in other_set
+        return SET([elem for elem in self.elements if elem not in other_set.elements])
+    
+    def symmetric_difference(self, other_set):
+        """
+        Compute symmetric difference (A Δ B = (A - B) ∪ (B - A)).
+        
+        Parameters:
+        other_set (SET): The other set
+        
+        Returns:
+        SET: New set containing elements in exactly one of the sets
+        """
+        # Symmetric difference = union of differences in both directions
+        union_set = self.union(other_set)
+        inter_set = self.intersection(other_set)
+        return union_set.set_difference(inter_set)
+    
+    def cartesian_product(self, other_set):
+        """
+        Compute Cartesian product (A × B).
+        
+        Parameters:
+        other_set (SET): The other set
+        
+        Returns:
+        list: List of ordered pairs (a, b) where a ∈ A, b ∈ B
+        """
+        # Cartesian product = all possible ordered pairs
+        return [(a, b) for a in self.elements for b in other_set.elements]
+    
+    def display(self):
+        """
+        Return the elements of the set.
+        
+        Returns:
+        list: List of set elements
+        """
+        return self.elements
+
+
+def menu_driven_set():
+    """
+    Interactive menu-driven interface for SET operations.
+    Provides user-friendly access to all set operations.
+    """
+    print("=== SET OPERATIONS SIMULATOR ===")
+    print("Enter elements of set A (space separated): ")
+    a = list(map(str, input().split()))
+    setA = SET(a)
+    
+    while True:
+        print("\n" + "="*40)
+        print("SET OPERATIONS MENU")
+        print("="*40)
+        print("1. Check Membership (is_member)")
+        print("2. Generate Power Set")
+        print("3. Check Subset Relation")
+        print("4. Union of Two Sets")
+        print("5. Intersection of Two Sets")
+        print("6. Complement Relative to Universal Set")
+        print("7. Set Difference (A - B)")
+        print("8. Symmetric Difference (A Δ B)")
+        print("9. Cartesian Product (A × B)")
+        print("10. Exit Program")
+        print("-"*40)
+        
+        try:
+            choice = int(input("Enter your choice (1-10): "))
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
+        
+        if choice == 1:
+            elem = input("Enter element to check for membership: ")
+            result = setA.is_member(elem)
+            print(f"Element '{elem}' is {'a member' if result else 'not a member'} of set A")
+            
+        elif choice == 2:
+            pset = setA.powerset()
+            print(f"Power Set of A (contains {len(pset)} subsets):")
+            for i, subset in enumerate(pset):
+                print(f"  Subset {i+1}: {subset}")
+                
+        elif choice == 3:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            result = setA.subset(setB)
+            print(f"Set A = {setA.display()}")
+            print(f"Set B = {setB.display()}")
+            print(f"A ⊆ B: {result}")
+            
+        elif choice == 4:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            union_set = setA.union(setB)
+            print(f"A ∪ B = {union_set.display()}")
+            
+        elif choice == 5:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            inter_set = setA.intersection(setB)
+            print(f"A ∩ B = {inter_set.display()}")
+            
+        elif choice == 6:
+            u = list(map(str, input("Enter elements of universal set U (space separated): ").split()))
+            universal = SET(u)
+            complement_set = setA.complement(universal)
+            print(f"Universal Set U = {universal.display()}")
+            print(f"A = {setA.display()}")
+            print(f"Aᶜ (complement) = {complement_set.display()}")
+            
+        elif choice == 7:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            diff_set = setA.set_difference(setB)
+            print(f"A - B = {diff_set.display()}")
+            
+        elif choice == 8:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            symdiff_set = setA.symmetric_difference(setB)
+            print(f"A Δ B = {symdiff_set.display()}")
+            
+        elif choice == 9:
+            b = list(map(str, input("Enter elements of set B (space separated): ").split()))
+            setB = SET(b)
+            product = setA.cartesian_product(setB)
+            print(f"A × B (Cartesian Product):")
+            for pair in product:
+                print(f"  {pair}")
+            print(f"Total ordered pairs: {len(product)}")
+            
+        elif choice == 10:
+            print("Exiting SET Operations Simulator. Goodbye!")
+            break
+            
+        else:
+            print("Invalid choice. Please select 1-10.")
