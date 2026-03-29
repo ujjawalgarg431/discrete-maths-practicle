@@ -1,0 +1,38 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    int adj[20][20];
+
+    cout << "Enter adjacency matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> adj[i][j];
+        }
+    }
+
+    bool isComplete = true;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i == j && adj[i][j] != 0) {
+                isComplete = false;
+            }
+            if (i != j && adj[i][j] != 1) {
+                isComplete = false;
+            }
+        }
+    }
+
+    if (isComplete)
+        cout << "Graph is a Complete Graph" << endl;
+    else
+        cout << "Graph is NOT a Complete Graph" << endl;
+
+    return 0;
+}
