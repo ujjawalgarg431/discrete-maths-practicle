@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+int n, C;
+int x[20];  // assuming n <= 20
+
+void findSolutions(int index, int sum) {
+    // If we reached last variable
+    if (index == n) {
+        // Check if total sum equals C
+        if (sum == C) {
+            for (int i = 0; i < n; i++) {
+                cout << x[i] << " ";
+            }
+            cout << endl;
+        }
+        return;
+    }
+
+    // Try all values from 0 to C
+    for (int i = 0; i <= C; i++) {
+        x[index] = i;
+        findSolutions(index + 1, sum + i);
+    }
+}
+
+int main() {
+    cout << "Enter number of variables (n): ";
+    cin >> n;
+
+    cout << "Enter constant (C <= 10): ";
+    cin >> C;
+
+    findSolutions(0, 0);
+
+    return 0;
+}
