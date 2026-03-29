@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    int adj[20][20];
+
+    cout << "Enter adjacency matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> adj[i][j];
+        }
+    }
+
+    int indegree[20] = {0};
+    int outdegree[20] = {0};
+
+    // Calculate degrees
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (adj[i][j] == 1) {
+                outdegree[i]++;  // row → outgoing edge
+                indegree[j]++;   // column → incoming edge
+            }
+        }
+    }
+
+    // Display results
+    cout << "\nVertex\tIn-degree\tOut-degree\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << "\t" << indegree[i] << "\t\t" << outdegree[i] << endl;
+    }
+
+    return 0;
+}
