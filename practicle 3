@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// ─────────────────────────────────────────────
+//  WITHOUT REPETITION  (each digit used once)
+// ─────────────────────────────────────────────
+void permuteWithout(vector<int> digits, vector<int> current, vector<bool> used) {
+    if ((int)current.size() == (int)digits.size()) {
+        for (int x : current) cout << x;
+        cout << "\n";
+        return;
+    }
+    for (int i = 0; i < (int)digits.size(); i++) {
+        if (!used[i]) {
+            used[i] = true;
+            current.push_back(digits[i]);
+            permuteWithout(digits, current, used);
+            current.pop_back();
+            used[i] = false;
+        }
+    }
+}
+
+// ─────────────────────────────────────────────
+//  WITH REPETITION  (each digit can repeat)
+// ─────────────────────────────────────────────
+void permuteWith(vector<int> digits, vector<int> current, int length) {
+    if ((int)current.size() == length) {
+        for (int x : current) cout << x;
+        cout << "\n";
+        return;
+    }
+    for (int i = 0; i < (int)digits.size(); i++) {
+        current.push_back(digits[i]);
+        permuteWith(digits, current, length);
+        current.pop_back();
+    }
+}
+
+// ─────────────────────────────────────────────
+//  MAIN
+// ─────────────────────────────────────────────
+int main() {
+    int n;
+    cout << "How many digits? ";
+    cin >> n;
+
+    vector<int> digits(n);
+    cout << "Enter " << n << " digit(s): ";
+    for (int i = 0; i < n; i++) cin >> digits[i];
+
+    int choice;
+    cout << "\n1. Without repetition\n2. With repetition\nChoice: ";
+    cin >> choice;
+
+    cout << "\n--- Permutations ---\n";
+
+    if (choice == 1) {
+        vector<bool> used(n, false);
+        vector<int>  current;
+        permuteWithout(digits, current, used);
+    } else {
+        int length;
+        cout << "Length of each permutation: ";
+        cin >> length;
+        vector<int> current;
+        permuteWith(digits, current, length);
+    }
+
+    return 0;
+}
