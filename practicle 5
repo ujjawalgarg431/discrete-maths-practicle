@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    
+    // Polynomial: f(n) = 4n^2 + 2n + 9
+    int coeff[3] = {9, 2, 4};  // constant, n^1, n^2
+    int degree = 2;
+
+    cout << "Enter value of n: ";
+    cin >> n;
+
+    int result = 0;
+    int power = 1;  // to store n^i
+
+    for (int i = 0; i <= degree; i++) {
+        result = result + coeff[i] * power;
+        power = power * n;  // increase power of n
+    }
+
+    cout << "Value of polynomial = " << result << endl;
+
+    return 0;
+}
