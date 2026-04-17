@@ -1,0 +1,59 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string s;
+    cout << "Enter digits: ";
+    cin >> s;
+
+    // sort first
+    sort(s.begin(), s.end());
+
+    // count distinct digits
+    int distinct = 0;
+    int freq[10] = {0};
+
+    for(int i = 0; i < s.length(); i++) {
+        int d = s[i] - '0';
+        if(freq[d] == 0) {
+            distinct++;
+        }
+        freq[d]++;
+    }
+
+    cout << "Distinct digits = " << distinct << endl;
+
+    int validCount = 0;
+
+    cout << "\nValid permutations:\n";
+
+    // generate permutations
+    do {
+        bool ok = true;
+
+        // check no same adjacent digits
+        for(int i = 0; i < s.length() - 1; i++) {
+            if(s[i] == s[i+1]) {
+                ok = false;
+                break;
+            }
+        }
+
+        if(ok) {
+            // convert to number
+            int num = stoi(s);
+
+            // check divisibility
+            if(num % distinct == 0) {
+                cout << s << endl;
+                validCount++;
+            }
+        }
+
+    } while(next_permutation(s.begin(), s.end()));
+
+    cout << "\nTotal valid permutations = " << validCount << endl;
+
+    return 0;
+}
